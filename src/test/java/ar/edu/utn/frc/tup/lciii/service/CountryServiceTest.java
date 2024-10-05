@@ -38,9 +38,12 @@ class CountryServiceTest {
         /*responseFromAPI.add(Map.of("name", Map.of("common","Argentina"),  "cca3","ARG", "population", 45,
                  "languages", "region", "sadfasfas", "continents", "South America",
                 Map.of("language", "Spanish")));*/
+
+
         Country country = new Country("Argentina", 45, 45.0, "ARG", "South America", List.of("BRA", "CHI"), Map.of("Spanish", "Spanish"), "South America");
 
-        when(restTemplate.getForObject(COUNTRIES_URL, List.class)).thenReturn( null);
+        when(restTemplate.getForObject(COUNTRIES_URL, List.class)).thenReturn(null);
+       // when(restTemplate.getForObject(COUNTRIES_URL, List.class)).thenReturn(responseFromAPI);
         when(countryService.mapToCountry(any())).thenReturn(country);
         when(countryService.mapToDTO(any())).thenReturn(new CountryDTO("ARG", "Argentina"));
        // when(countryService.mapearACountry(any())).thenReturn(List.of(country));

@@ -1,10 +1,9 @@
 package ar.edu.utn.frc.tup.lciii.controllers;
 import ar.edu.utn.frc.tup.lciii.dtos.common.CountryDTO;
-import ar.edu.utn.frc.tup.lciii.model.Country;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
+import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -13,13 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(CountryController.class)
@@ -80,14 +76,23 @@ class CountryControllerTest {
     }
 
     @Test
-    void getCountriesByLanguage() {
-
-        
+    void getCountriesByLanguage() throws Exception {
+        List<CountryDTO> countries = new ArrayList<>();
+        countries.add(new CountryDTO("CHE", "Switzerland"));
+        given(service.getAllCountries("CHE", "Switzerland")).willReturn(countries);
+        mockMvc.perform(get("/api/countries?language=German"))
+                .andDo(print())
+                .andExpect(status().isOk());
 
     }
 
     @Test
-    void getCountryWithMostBorders() {
+    void getCountryWithMostBorders() throws Exception {
+        List<CountryDTO> countries = new ArrayList<>();
+        given(service.getAllCountries("CHN", "China")).willReturn(countries);
+        mockMvc.perform(get("/api/countries/most-borders"))
+                .andDo(print())
+                .andExpect(content().json("{\"code\":\"CHN\",\"name\":\"China\"}"));
     }
 
     @Test
