@@ -37,7 +37,7 @@ public class CountryService {
 
         public List<CountryDTO> getAllCountries(String code, String name) {
                 List<Map<String, Object>> response = restTemplate.getForObject(COUNTRIES_URL, List.class);
-                List<Country> countries = response.stream().map(this::mapToCountry).collect(Collectors.toList());
+                List<Country> countries = mapearACountry(response);
                 countriesGen.addAll(countries);
                 List<CountryDTO> countriesDTO =countries.stream().map(this::mapToDTO).collect(Collectors.toList());
                 if(code != null){
@@ -47,6 +47,11 @@ public class CountryService {
                         countriesDTO = countriesDTO.stream().filter(countryDTO -> countryDTO.getName().equals(name)).collect(Collectors.toList());
                 }
                 return countriesDTO;
+        }
+
+        public List<Country> mapearACountry(List<Map<String, Object>> lista){
+                List<Country> countries = lista.stream().map(this::mapToCountry).collect(Collectors.toList());
+                return countries;
         }
 
         public List<Country> getAllCountries() {

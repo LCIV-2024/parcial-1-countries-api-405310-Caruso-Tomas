@@ -7,7 +7,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.willReturn;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import ar.edu.utn.frc.tup.lciii.service.CountryService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @WebMvcTest(CountryController.class)
 class CountryControllerTest {
     @Autowired
@@ -42,13 +44,46 @@ class CountryControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
+    /*
+    @GetMapping("/countries/{continent}/continent")
+    public List<CountryDTO> getCountriesByContinent(@PathVariable String continent) {
+        return countryService.getCountriesByContinent(continent);
+    }
+
+    @GetMapping("/countries/{language}/language")
+    public List<CountryDTO> getCountriesByLanguage(@PathVariable String language) {
+        return countryService.getCountriesByLanguage(language);
+    }
+
+    @GetMapping("/countries/most-borders")
+    public CountryDTO getCountryWithMostBorders() {
+        return countryService.getWithMostBorders();
+    }
+
+    @PostMapping("/countries")
+    public List<CountryDTO> getAndSaveCountries(@RequestParam(required = false) String code, @RequestParam(required = false) String name
+    ,@RequestBody(required = true) int amountOfCountryToSave) {
+        return countryService.getAndSaveCountries(code, name, amountOfCountryToSave);
+    }
+*/
 
     @Test
-    void getCountriesByContinent() {
+    void getCountriesByContinent() throws Exception {
+        List<CountryDTO> countries = new ArrayList<>();
+        countries.add(new CountryDTO("CHE", "Switzerland"));
+        given(service.getAllCountries("CHE", "Switzerland")).willReturn(countries);
+        mockMvc.perform(get("/api/countries?continent=Europe"))
+                .andDo(print())
+                //.andExpect(content().json("[{\"code\":\"CHE\",\"name\":\"Switzerland\"}]"))
+                .andExpect(status().isOk());
+
     }
 
     @Test
     void getCountriesByLanguage() {
+
+        
+
     }
 
     @Test
