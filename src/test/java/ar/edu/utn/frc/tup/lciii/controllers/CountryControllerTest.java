@@ -88,8 +88,8 @@ class CountryControllerTest {
 
     @Test
     void getCountryWithMostBorders() throws Exception {
-        List<CountryDTO> countries = new ArrayList<>();
-        given(service.getAllCountries("CHN", "China")).willReturn(countries);
+        CountryDTO countries = new CountryDTO("CHN", "China");
+        given(service.getWithMostBorders()).willReturn(countries);
         mockMvc.perform(get("/api/countries/most-borders"))
                 .andDo(print())
                 .andExpect(content().json("{\"code\":\"CHN\",\"name\":\"China\"}"));
